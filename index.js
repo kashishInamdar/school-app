@@ -1,12 +1,28 @@
 import express from "express"
+import mongoose ,  {model , Schema } from "mongoose";
 
 const app = express();
-
 app.use(express.json());
 
 const PORT = 5000;
+const MONGODB_URI = "mongodb+srv://kashishofficial4690:IibIbiQcYKModSH7@igcp.5ixfneb.mongodb.net/school"
 
-const students = [];
+const connectMongoDB = async ()=>{
+  const conn =   await mongoose.connect(MONGODB_URI)
+  if(conn){
+    console.log("MongoDB Connect Successfully . ")
+  }
+};
+connectMongoDB();
+
+const studentSchema = new Schema({
+  name : String,
+  age : Number ,
+  mobile: Number,
+  email : String,
+})
+
+const Student = model("Student" , studentSchema);
 
 app.get("/health", (req , res)=>{
   res.json({ status : "All good , All set !"})
