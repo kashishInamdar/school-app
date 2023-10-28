@@ -39,7 +39,7 @@ app.get("/students" , (req , res)=>{
 });
 
 //  ======= Post Student
-app.post('/student', (req, res) => {
+app.post('/student', async (req, res) => {
     const {name, age, mobile, email} = req.body;
 
     if (!name) {
@@ -70,21 +70,19 @@ app.post('/student', (req, res) => {
     });
   }
 
-    const id = Math.floor(Math.random() * 100000) + 1;
 
-    const newStudent = {
-        id,
-        name,
-        age,
-        mobile,
-        email,
-    }
+   const stud = new Student({
+    name : name , 
+    age : age,
+    mobile : mobile ,
+    email: email,
+   })
 
-    students.push(newStudent);
+   const savedStudent = await stud.save();
 
     res.json({
         success: true,
-        data: newStudent,
+        data: savedStudent,
         message: "Successfully added a new student"
     });
 })
