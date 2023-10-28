@@ -30,7 +30,9 @@ app.get("/health", (req , res)=>{
 
 // ======= GET Students
 
-app.get("/students" , (req , res)=>{
+app.get("/students" , async (req , res)=>{
+  const students = await Student.find()
+
   res.json({
     success : true , 
     data : students ,
@@ -89,23 +91,9 @@ app.post('/student', async (req, res) => {
 
 //  ========= GET Student
 
-app.get("/student" , (req , res)=>{
-  const {id} = req.query;
-
-  let student = null ;
-
-  students.forEach((stud)=>{
-      if(stud.id == id){
-        student = stud;
-      }
-  })
-
-  if(student == null){
-    return res.json({
-      success : false,
-      massage : "Student not found"
-    })
-  }
+app.get("/student" , async (req , res)=>{
+  const {email} = req.query;
+    const student = await Student.findOne({email : email})
 
   res.json({
     success : true,
