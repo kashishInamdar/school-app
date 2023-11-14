@@ -1,14 +1,15 @@
 import express from "express"
 import mongoose ,  {model , Schema } from "mongoose";
+import dotenv from "dotenv"
+dotenv.config();
 
 const app = express();
 app.use(express.json());
 
 const PORT = 5000;
-const MONGODB_URI = "mongodb+srv://kashishofficial4690:IibIbiQcYKModSH7@igcp.5ixfneb.mongodb.net/school"
 
 const connectMongoDB = async ()=>{
-  const conn =   await mongoose.connect(MONGODB_URI)
+  const conn =   await mongoose.connect(process.env.MONGODB_URI)
   if(conn){
     console.log("MongoDB Connect Successfully . ")
   }
@@ -19,7 +20,9 @@ const studentSchema = new Schema({
   name : String,
   age : Number ,
   mobile: Number,
-  email : String,
+  email : {
+    type : String,
+  },
 })
 
 const Student = model("Student" , studentSchema);
@@ -36,7 +39,7 @@ app.get("/students" , async (req , res)=>{
   res.json({
     success : true , 
     data : students ,
-    massage : "successfullt fetched all students" , 
+    massage : "successfull fetched all students" , 
   })
 });
 
@@ -101,6 +104,17 @@ app.get("/student" , async (req , res)=>{
     massage : "Successfully fetched student",
   })
 })
+
+//  ========== Delete ===========
+
+app.delete("/student/:id" , (req , res)=>{
+    const {id} = req.params;
+    const student = Student.findById(id);
+    Student.deleteOne({id:id})
+})
+
+
+
 
 app.listen(PORT ,()=>{
     console.log(`Server is runing on port ${PORT} .`);
