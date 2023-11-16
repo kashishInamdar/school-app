@@ -20,12 +20,13 @@ function Home() {
 
       {
         students?.map((student, index) => {
-          const {name, email, age, mobile} = student
+          const {_id ,name, email, age, mobile} = student
 
           return (
-           <div key={index} className='student-cards '>
+           <div key={index}  className='student-cards' >
               <h3>{name} ({age} years old)</h3>
               <p>✉️ {email}, 📞 {mobile}</p>
+              <a href={`/studentdetail/${_id}`} target='_blank'>view more</a>
            </div>
           )
         })
